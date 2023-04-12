@@ -1,0 +1,102 @@
+#Initalize book class. Book variables will now to connected with title and authors.
+class book:
+
+  def __init__(self, title, author):
+    self.title = title
+    self.author = author
+    # This function will determine if the book is currently in the library catalog.
+    # At baseline all books are checked in. So this variable is set to false.
+    self.checked_out = False
+
+  #When called checked_out will change its book variable to true. Book class will allow title to be identifyed with title and author.
+  def check_out(self):
+    self.checked_out = True
+    print(f'You have checked out {self.title} by {self.author} \n')
+    return self.title
+
+  #When called return will change book variable to false. Book class will allow title to be identifyed with title and author.
+  def returned(self):
+    self.checked_out = False
+    print(f'Thank you for returning {self.title}. by {self.author}\n')
+    return self.title
+
+
+#This class handles the book collection as a whole. This provides methods for managing and interaction.
+class libraryCatalog:
+
+  def __init__(self, books):
+    self.books = books
+
+#Shows books with variables with the check_out = false
+
+  def available_books(self):
+    #creates list that iterates through the book variable. It passes throgh
+    #book.check_out is false. If true the book variable is ignored.
+    available_books = ([book for book in self.books if not book.checked_out])
+    print('The Sophia Library has these books available!\n')
+    for book in available_books:
+      print(f'-- {book.title} by {book.author}')
+    print('\n')
+
+  def check_out_book(self):
+    what_book = input('What books would to like to check out?: ')
+    print('\n')
+    for book in self.books:
+      #looks in book class. will check if the book has the checked_out variable to true.
+      if what_book == book.title and not book.checked_out:
+        book.check_out()
+        return
+    #if checked_out is already true this will print instead of function being called
+    print(f'Sorry, {what_book} is not in the library.\n')
+
+    #Updates the catalog
+
+  def check_in_book(self):
+    what_book = input('What book would you like to return?: ')
+    print('\n')
+    for book in self.books:
+      #looks in book class. will check if the book has the checked_out variable to false.
+      if what_book == book.title and book.checked_out:
+        book.returned()
+        return
+    #is checked_out is already false, this will print instead on function being called.
+    print(f'Sorry, {what_book} is not in our catalog or already checked in.\n')
+
+
+#Create what books are available catalog
+book1 = book('Ugly Love', 'Colleen Hoover')
+book2 = book('It Ends with Us', 'Colleen Hoover')
+book3 = book('Captain Underpants', 'Dave Pilkey')
+book4 = book('The Attack of the Talking Toilets', 'Dave Pilkey')
+book5 = book('Harry Potter', 'J.K. Rowling')
+
+#organizes books so they are in a list and become iterable.
+catalog = libraryCatalog([book1, book2, book3, book4, book5])
+
+#main function that provides a user interface for the library catalog.
+#this function will run this snipet of code first.
+if __name__ == '__main__':
+
+  print('Welcome to the Sophia Library Catalog.\n')
+  print('Please choose from the following menu.')
+  print('Type in the corresonding number from the the options.')
+  print((
+    '1 -- View Avaiable Books. \n2 -- Check Out a Book. \n3 -- Return a Book.\n4 -- Exit Catalog.\n'
+  ))
+  #The while loop is up here so the user is prompted over and over again until they are done with the catalog.
+  while (True):
+    try:
+      user_input = int(input('What would you like to do?: '))
+      print('\n')
+      if user_input == 1:
+        catalog.available_books()
+      elif user_input == 2:
+        catalog.check_out_book()
+      elif user_input == 3:
+        catalog.check_in_book()
+      elif user_input == 4:
+        print('Thank you. Have a good day.')
+        quit()
+    #try and except will catach any errors that may occur if input is not a number
+    except Exception as e:
+      print(f'{e}: Please type in a corresponding number./n')
